@@ -60,7 +60,7 @@ if __name__ =='__main__':
         encoder_decoder_type="bart",
         encoder_decoder_name="facebook/bart-base",
         args=model_args,
-        cuda_device = 1 ,
+        cuda_device = 0 ,
         regularization = True,
         # use_cuda=False,
     )
