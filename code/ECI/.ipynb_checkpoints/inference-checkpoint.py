@@ -23,11 +23,12 @@ from seq2seq_model import Seq2SeqModel,AutoTokenizer
 
 
 class InputExample():
-    def __init__(self, input_TXT, event1, event2, labels):
+    def __init__(self, input_TXT, event1, event2, labels, type):
         self.input_TXT = input_TXT
         self.event1 = event1
         self.event2 = event2
         self.labels = labels
+        self.type = type
 
 def predict_relation(input_TXT, event1, event2):  # 预测一个句子中两个事件的关系
     input_TXT = [input_TXT]*2
@@ -113,7 +114,7 @@ if __name__ =='__main__':
     examples = []
 
     # f = open('./data/event_train_eventstoryline.csv', 'r',encoding='utf-8')
-    f = open(f'{data_loc}/test_fold_{fold_num}.csv', 'r',encoding='utf-8')
+    f = open('./data/test_eventstoryline.csv', 'r',encoding='utf-8')
     with f:
         reader = csv.reader(f)
         for row in islice(reader, 1, None):
@@ -121,16 +122,27 @@ if __name__ =='__main__':
             event1 = row[2]
             event2 = row[3]
             labels = row[4]
-            examples.append(InputExample(input_TXT=input_TXT, event1=event1, event2=event2, labels=labels))
+            type = row[5]
+            examples.append(InputExample(input_TXT=input_TXT, event1=event1, event2=event2, labels=labels, type=type))
 
 
     trues_list = []
     preds_list = []
+    trues_list_intra = []
+    preds_list_intra = []
+    trues_list_inter = []
+    preds_list_inter = []
     num_01 = len(examples)
     num_point = 0
     start = time.time()
     for example in examples:
         pre_res = predict_relation(example.input_TXT,example.event1, example.event2)
+        if example.type == 'intra':
+            preds_list_intra.append(pre_res)
+            trues_list_intra.append(example.labels)
+        else:
+            preds_list_inter.append(pre_res)
+            trues_list_inter.append(example.labels)
 
         preds_list.append(pre_res)
         trues_list.append(example.labels)
@@ -139,7 +151,27 @@ if __name__ =='__main__':
         # print('Gold:', trues_list[num_point])
         num_point += 1
 
+    # intra
+    print(classification_report(trues_list_intra,preds_list_intra))
 
+    intra_results = {
+    
+        "P": precision_score(trues_list_intra, preds_list_intra,average=None),
+        "R": recall_score(trues_list_intra, preds_list_intra,average=None),
+        "F": f1_score(trues_list_intra, preds_list_intra,average=None),
+    }
+    print(intra_results)
+
+    # inter
+    print(classification_report(trues_list_inter,preds_list_inter))
+
+    inter_results = {
+        
+        "P": precision_score(trues_list_inter, preds_list_inter,average=None),
+        "R": recall_score(trues_list_inter, preds_list_inter,average=None),
+        "F": f1_score(trues_list_inter, preds_list_inter,average=None)
+    }
+    print(inter_results)
 
     # all
     print(classification_report(trues_list,preds_list))
@@ -155,29 +187,6 @@ if __name__ =='__main__':
         "F": f1_score(trues_list, preds_list,average=None)
     }
     print(results)
-    import os
-    # Specify the directory where you want to save the results
-    results_dir = f"./results/fold_{fold_num}"
-    # Create the directory if it does not exist
-    os.makedirs(results_dir, exist_ok=True)
-
-    # Define the path for the results file
-    results_file_path = os.path.join(results_dir, "results.txt")
-
-    # Write the results to the file
-    with open(results_file_path, "w") as results_file:
-        # Write the classification report
-        report = classification_report(trues_list, preds_list)
-        results_file.write("Classification Report:\n")
-        results_file.write(report)
-        results_file.write("\n\n")
-
-        # Write the detailed results
-        results_file.write("Detailed Results:\n")
-        for key, value in results.items():
-            results_file.write(f"{key}: {value}\n")
-
-    print(f"Results successfully saved to {results_file_path}")
 
 
 
