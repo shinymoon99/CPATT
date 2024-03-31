@@ -1,3 +1,5 @@
 data/
 exp/
 runs/
+data/CTB_n_fold/model_*/
+data/ESC_n_fold/model_*/
