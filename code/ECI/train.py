@@ -27,7 +27,7 @@ if __name__ =='__main__':
     transformers_logger.setLevel(logging.WARNING)
 
 
-    data = pd.read_csv(f"{dataset_location}/train_fold_{fold_num}.csv", sep=',',encoding = 'gbk',usecols=[0,1]).values.tolist()
+    data = pd.read_csv(f"{dataset_location}/train_fold_{fold_num}.csv", sep=',',encoding = 'utf-8',usecols=[0,1]).values.tolist()
     # data = pd.read_csv("./data/train_eventstoryline.csv", sep=',',encoding = 'UTF-8',usecols=[0,1]).values.tolist()
     df = pd.DataFrame(data, columns=["input_text", "target_text"])
     train_df=df[:int(df.shape[0] * 0.8)]
@@ -47,7 +47,7 @@ if __name__ =='__main__':
         "evaluate_during_training_verbose": True,
         "use_multiprocessing": False,
         "max_length": 32,
-        "manual_seed": 3407,
+        "manual_seed": 6666,
         "save_steps": 11898,
         "gradient_accumulation_steps": 1,
         "best_model_dir":f"{dataset_location}/model_{fold_num}",

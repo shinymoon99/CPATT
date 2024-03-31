@@ -1,15 +1,15 @@
 Classification Report:
               precision    recall  f1-score   support
 
-Cause-Effect       0.46      0.94      0.62        33
-        NONE       0.50      0.05      0.10        38
+Cause-Effect       0.91      0.64      0.75        33
+        NONE       0.75      0.95      0.84        38
 
-    accuracy                           0.46        71
-   macro avg       0.48      0.50      0.36        71
-weighted avg       0.48      0.46      0.34        71
+    accuracy                           0.80        71
+   macro avg       0.83      0.79      0.79        71
+weighted avg       0.83      0.80      0.80        71
 
 
 Detailed Results:
-P: [0.46268657 0.5       ]
-R: [0.93939394 0.05263158]
-F: [0.62      0.0952381]
+P: [0.91304348 0.75      ]
+R: [0.63636364 0.94736842]
+F: [0.75      0.8372093]

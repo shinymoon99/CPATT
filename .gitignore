@@ -1,3 +1,4 @@
+cache_dir/
 exp/
 runs/
 data/CTB_n_fold/model_*/
