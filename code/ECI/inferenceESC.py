@@ -189,4 +189,32 @@ if __name__ =='__main__':
     print(results)
 
 
+# Define the path for the results file
+results_file_path = os.path.join(results_dir, "esc_results.txt")
 
+# Open the file to write the results
+with open(results_file_path, "w") as results_file:
+    # Write intra results
+    results_file.write("Intra Results:\n")
+    report_intra = classification_report(trues_list_intra, preds_list_intra)
+    results_file.write(report_intra + "\n")
+    for key, value in intra_results.items():
+        results_file.write(f"{key}: {value}\n")
+    results_file.write("\n")
+
+    # Write inter results
+    results_file.write("Inter Results:\n")
+    report_inter = classification_report(trues_list_inter, preds_list_inter)
+    results_file.write(report_inter + "\n")
+    for key, value in inter_results.items():
+        results_file.write(f"{key}: {value}\n")
+    results_file.write("\n")
+
+    # Write overall results
+    results_file.write("Overall Results:\n")
+    report_overall = classification_report(trues_list, preds_list)
+    results_file.write(report_overall + "\n")
+    for key, value in results.items():
+        results_file.write(f"{key}: {value}\n")
+
+print(f"Results successfully saved to {results_file_path}")
